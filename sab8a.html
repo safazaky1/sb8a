@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الرئيسية - شركة البركات</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 600px;
+      margin: 30px auto;
+    }
+    .logo {
+      width: 160px;
+      margin-bottom: 30px;
+    }
+    h1 {
+      color: #8e44ad;
+      margin-bottom: 20px;
+    }
+    button, select, input {
+      padding: 10px;
+      font-size: 16px;
+      margin: 10px 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #8e44ad;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #732d91;
+    }
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    #result, #result2 {
+      font-weight: bold;
+      color: #2980b9;
+      margin-top: 10px;
+    }
+    .footer {
+      margin-top: 30px;
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="logo.jpg.jpg" alt="لوجو البركات" class="logo">
+    <h1>مرحبا بك في شركة البركات</h1>
+
+    <div class="tabs">
+      <button onclick="showTab('arosaTab')">حساب صبغة العروسة</button>
+      <button onclick="showTab('pureTab')">حساب صبغة بيور PP أو PE</button>
+    </div>
+
+    <div id="arosaTab" class="tab-content active">
+      <label>وزن البيور (كجم):</label>
+      <input type="number" id="pureWeight" placeholder="مثال: 50">
+      <label>وزن الكسر (كجم):</label>
+      <input type="number" id="recycledWeight" placeholder="مثال: 25">
+      <button onclick="calculateArosaPigment()">احسب كمية الصبغة</button>
+      <div id="result"></div>
+    </div>
+
+    <div id="pureTab" class="tab-content">
+      <label>وزن البيور (كجم):</label>
+      <input type="number" id="pureOnlyWeight" placeholder="مثال: 50">
+      <label>نسبة الصبغة:</label>
+      <select id="purePercentage">
+        <option value="1">1%</option>
+        <option value="2" selected>2%</option>
+        <option value="3">3%</option>
+        <option value="4">4%</option>
+        <option value="5">5%</option>
+      </select>
+      <button onclick="calculatePurePigment()">احسب كمية الصبغة</button>
+      <div id="result2"></div>
+    </div>
+
+    <div class="footer">
+      تم التطوير بواسطة المهندس صفا ذكي
+    </div>
+  </div>
+
+  <script>
+    function showTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+    }
+
+    function calculateArosaPigment() {
+      const pure = parseFloat(document.getElementById('pureWeight').value);
+      const recycled = parseFloat(document.getElementById('recycledWeight').value);
+      if (isNaN(pure) || pure <= 0 || isNaN(recycled) || recycled < 0) {
+        document.getElementById('result').textContent = 'من فضلك أدخل الأوزان بشكل صحيح';
+        return;
+      }
+      const totalWeight = pure + recycled;
+      const recycledRatio = recycled / totalWeight;
+      const pigmentPercentage = 0.5 - (recycledRatio * 0.5);
+      const pigmentAmountGrams = (totalWeight * pigmentPercentage * 10).toFixed(0);
+      document.getElementById('result').textContent = `كمية الصبغة المطلوبة: ${pigmentAmountGrams} جرام بنسبة ${(pigmentPercentage * 100).toFixed(2)}%`;
+    }
+
+    function calculatePurePigment() {
+      const weight = parseFloat(document.getElementById('pureOnlyWeight').value);
+      const percentage = parseFloat(document.getElementById('purePercentage').value);
+      if (isNaN(weight) || weight <= 0) {
+        document.getElementById('result2').textContent = 'من فضلك أدخل الوزن بشكل صحيح';
+        return;
+      }
+      const pigmentAmountGrams = (weight * percentage * 10).toFixed(0);
+      document.getElementById('result2').textContent = `كمية الصبغة المطلوبة: ${pigmentAmountGrams} جرام بنسبة ${percentage}%`;
+    }
+  </script>
+</body>
+</html>
